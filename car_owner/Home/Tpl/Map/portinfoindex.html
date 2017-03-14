@@ -1,0 +1,76 @@
+<!doctype html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,minimum-scale=1.0,user-scalable=no" />
+        <meta name="MobileOptimized" content="320" />
+        <meta name="description" content="" />
+        <meta name="keywords" content="" />
+        <meta name="format-detection" content="telephone=no">
+        <title>洗车场列表首页</title>
+        <script charset="utf-8" src="http://map.qq.com/api/js?v=2.exp&key=IFEBZ-MF5HU-IXOVH-2JWRJ-JCKCK-CAFO5&libraries=drawing,geometry,autocomplete,convertor"></script>
+        <link type="text/css" rel="stylesheet" href="{$Think.const.CSS_URL}style.css" />
+        <script type="text/javascript" src="https://3gimg.qq.com/lightmap/components/geolocation/geolocation.min.js"></script>
+        <script>
+            var lat = null;
+            var lng = null;
+            var latlngs = [];
+            var geolocations = new qq.maps.Geolocation("VT7BZ-6WUCX-FOY4X-7JQLZ-IGRHK-HFFAC", "car");
+            var options = {timeout: 8000};
+            function getLocation() {
+                //if (navigator.geolocation){
+                //    navigator.geolocation.getCurrentPosition(showPosition);
+                // }else{
+                //   x.innerHTML="浏览器不支持定位.";
+                //  location.href="index.php?m=Map&a=portinfolist&city=南京";
+                // }
+
+                geolocations.getLocation(showPosition, null, options);
+            }
+
+            function showPosition(position) {
+                //定位地图中心点
+                //var lat=position.coords.latitude; 
+                //var lng=position.coords.longitude;
+                var lat = position.lat;
+                var lng = position.lng;
+                var city = position.city;
+
+                //新增修改市的功能
+                var lastword = city.substr(city.length - 1, 1);
+                if (lastword == '市') {
+                    city = city.substring(0, city.length - 1);
+                }
+                location.href = "index.php?m=Map&a=portinfolist&lat=" + lat + "&lng=" + lng + "&city=" + city;
+            }
+
+            function showPosition_old(position) {
+                //网页坐标
+                lat = parseFloat(position.coords.latitude);
+                lng = parseFloat(position.coords.longitude);
+                var latLng = new qq.maps.LatLng(lat, lng);
+
+                //地址和经纬度之间进行转换服务
+                geocoder = new qq.maps.Geocoder();
+                //调用获取位置方法
+                geocoder.getAddress(latLng);
+
+                geocoder.setComplete(function (result) {
+                    var city = result.detail.addressComponents.city;
+                    location.href = "index.php?m=Map&a=portinfolist&city=" + city + "&lat=" + lat + "&lng=" + lng;
+                });
+
+                //若服务请求失败，则运行以下函数
+                geocoder.setError(function () {
+                    var city = "福州";
+                    location.href = "index.php?m=Map&a=portinfolist&city=" + city + "&lat=" + lat + "&lng=" + lng;
+                });
+            }
+
+        </script>
+    </head>
+
+    <body onload="getLocation()">
+    </body>
+</html>

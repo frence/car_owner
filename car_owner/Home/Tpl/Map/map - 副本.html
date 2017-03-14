@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html style="width:100%; height:100%;">
+<head>
+<script src="{$Think.const.JS_URL}jquery-1.7.1.min.js"></script>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,minimum-scale=1.0,user-scalable=no" />
+<meta name="MobileOptimized" content="320" />
+<style type="text/css">
+html,body{
+    width:100%;
+    height:100%;
+    overflow:hidden;
+}
+*{
+    margin:0px;
+    padding:0px;
+}
+</style>
+<title>洗车场</title>
+<script charset="utf-8" src="http://map.qq.com/api/js?v=2.exp&key=VT7BZ-6WUCX-FOY4X-7JQLZ-IGRHK-HFFAC&libraries=drawing,geometry,autocomplete,convertor"></script>
+<link type="text/css" rel="stylesheet" href="{$Think.const.CSS_URL}style.css" />
+<script type="text/javascript" src="{$Think.const.SITE_URL}Public/layer20/layer.js" ></script>
+<script type="text/javascript" src="{$Think.const.JS_URL}common/language.js" ></script>
+<script type="text/javascript" src="https://3gimg.qq.com/lightmap/components/geolocation/geolocation.min.js"></script>
+<script>
+
+var lat = null;
+var lng = null;
+var latlngs=[];
+var LatLng = null;
+var geolocations =new qq.maps.Geolocation("VT7BZ-6WUCX-FOY4X-7JQLZ-IGRHK-HFFAC", "car");
+ 
+var options = {timeout: 8000};
+
+//定位自身坐标
+function getLocation(){
+  //if (navigator.geolocation){
+
+     // navigator.geolocation.getCurrentPosition(showPosition);
+    //}else{
+    ///  x.innerHTML="浏览器不支持定位.";
+    //}
+  showPosition()
+  //geolocations.getLocation(showPosition,null, options);
+  }
+//初始化地图
+function showPosition(){
+    //数据源
+    var data = {:json_encode($list)}; 
+    //记录开启的infowindow 
+    var current_info;
+    
+    //开始创建多标注
+    qq.maps.convertor.translate(new qq.maps.LatLng(lat,lng), 1, 
+        function(res){
+            //创建地图对象
+      
+            var map = new qq.maps.Map(document.getElementById("container"),{
+                      center:  LatLng,
+                      zoom: 14
+            });
+
+            $.each(data,function(entryindex,entry){
+ 
+                  //标记自身所在的位置
+                  var anchor = new qq.maps.Point(6, 6),
+                  size = new qq.maps.Size(36, 36),
+                  origin = new qq.maps.Point(0, 0),
+                  icon = new qq.maps.MarkerImage('{$Think.const.IMG_URL}map.png', size, origin, anchor);
+                  var position_mark = new qq.maps.LatLng(entry.ParkX,entry.ParkY);
+                  var marker = new qq.maps.Marker({
+                      icon: icon,
+                      map: map,
+                      position:position_mark
+                  });
+
+                  var infoWin = new qq.maps.InfoWindow({
+                      map: map
+                      });
+                  qq.maps.event.addListener(marker, 'click', function() {
+                      if(current_info){
+                        current_info.close();
+                      }
+                      str = ' <div class="text">'
+                          +' <p>'+entry.ParkName+'</p>'
+                          +' <p>地址:'+entry.ParkAddress+'</p>'
+                          +' <p>自助洗价格<span>'+entry.priceself+'元</span>/次</p>'
+                          +'  </div>'
+                          +' <div class="input">'
+                          +' <button class="b1" onclick="Navigate(this)" '
+                          +' ParkId="'+entry.ParkId+'">导航</button>'
+                          +' <button class="b2" onclick="attention(this)"'
+                          +' ParkId="'+entry.ParkId+'">关注</button>'
+                          +' <button class="b2" onclick="cardetails(this)"'
+                          +' ParkId="'+entry.ParkId+'">详情</button>'
+                          +' </div>'
+                      infoWin.setContent(str);
+                       
+                      infoWin.setPosition(marker.getPosition());infoWin.open();
+                      current_info = infoWin;
+                  });
+            }); 
+    });
+    setTimeout(function(){layer.closeAll();},2000);         
+}
+//获取地址
+function getposByaddr(){ 
+
+  layer.msg('玩命加载中',{time: 10000,icon: 16,shade: 0.01}, function(){
+ 
+  });
+   
+ //地址和经纬度之间进行转换服务
+  geocoder = new qq.maps.Geocoder();
+  var city = "{$city}";
+  geocoder.getLocation(city); 
+  //设置服务请求成功的回调函数
+  geocoder.setComplete(function(result) {
+       LatLng = result.detail.location;   
+        
+        showPosition();
+  });
+  //若服务请求失败，则运行以下函数
+  geocoder.setError(function() {
+      alert("获取中心点失败");
+      lat = "{$lat}";
+      lng = "{$lng}";
+      LatLng = new qq.maps.LatLng(lng,lat);
+      showPosition();
+  });
+}
+
+  function Navigate(obj){
+    var ParkId =$(obj).attr("ParkId");
+    location.href="{:U('Map/Navigate')}?ParkId="+ParkId;
+  }
+
+  function attention(obj){
+    var ParkId = $(obj).attr("ParkId");
+    $.post('index.php?m=Map&a=attention',{"ParkId":ParkId},function (msg){
+      if(msg ==1){
+        showmodel(prompt_map_success);
+        return;
+      }else if(msg ==0){
+        showmodel(prompt_map_error);
+        return;
+      }else if(msg ==2){
+        showmodel(prompt_map_attention);
+        return;
+      }else{
+        showmodel(prompt_map_openid);
+        return;
+      }
+    });
+      
+
+  }
+
+  function cardetails(obj){
+    var ParkId = $(obj).attr("ParkId");
+    location.href="index.php?m=Map&a=cardetails&ParkId="+ParkId;
+  }
+
+    //关闭弹出层
+    function closemodel(){
+        $(".nb_wrap,.nb").hide(); 
+        $("#"+mouse_add).focus();
+        
+    }
+    //弹出弹出层
+    function showmodel(str){
+        $(".nb_wrap,.nb_1").html(str);
+        $(".nb_wrap,.nb").show(); 
+    }
+
+
+
+
+</script>
+</head>
+  <body onload="getposByaddr()" style="width:100%; height:100%;">
+    <div class="outer" style="width:100%;height:100%;" id="container">
+           
+      <div style="width:100%;height:100%;" id="container"></div>
+    </div>
+    <div style='width:100%; height:100%;' id="infoDiv">
+       <div class="nb_wrap"></div>
+        <div class="nb" onclick="closemodel()">
+            <div class="nb_1"></div>
+            <div class="nb_2">
+                <span>
+                <a href="javascript:void(0);" >确定</a>
+                </span>
+            </div>
+        </div>
+    </div>
+    <!--<div class="db_li" style="width:100%;position:fixed;bottom:0px;border:1px solid #ccc;">
+      <ul>
+          <li><button onclick="Navigate(this)" ParkId="{$v1['ParkId']}">导航</button>
+            <span>{$v1['ParkName']}</span>
+          </li>
+      </ul>
+    </div>-->
+  </body>
+</html>

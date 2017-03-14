@@ -1,0 +1,64 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,minimum-scale=1.0,user-scalable=no" />
+<meta name="MobileOptimized" content="320" />
+<meta name="description" content="" />
+<meta name="keywords" content="" />
+<title>微信充值</title>
+<link type="text/css" rel="stylesheet" href="{$Think.const.CSS_URL}style.css" />
+</head>
+
+<body>
+	<div class="choose">
+    <div class="choose_img"><img src="{$Think.const.IMG_URL}wxzft.jpg"></div>
+      <form action ="{:U('Weixinpays/saverecord')}"  method="post">
+    	<div class="choose_tx">选择充值金额：</div>
+        <div class="choose_je">
+        	<label class="selected" for="value1">
+            	<input type="radio" value="1" name="value1" id="value1" class="radio">
+                <div class="account_cz_e_t"><span>￥</span><b>1元</b></div>
+                <div class="account_cz_e_b">充1元<span>送1元</span></div>
+            </label>
+            <label for="value2">
+            	<input type="radio" value="10" name="value2" id="value2" class="radio">
+                <div class="account_cz_e_t"><span>￥</span><b>10元</b></div>
+                <div class="account_cz_e_b">充10元<span>送10元</span></div>
+            </label>
+            <label for="value3">
+            	<input type="radio" value="50" name="value3" id="value3" class="radio">
+                <div class="account_cz_e_t"><span>￥</span><b>50元</b></div>
+                <div class="account_cz_e_b">充50元<span>送50元</span></div>
+            </label>
+            <label for="value4">
+            	<input type="radio" value="100" name="value4" id="value4" class="radio">
+                <div class="account_cz_e_t"><span>￥</span><b>100元</b></div>
+                <div class="account_cz_e_b">充100元<span>送100元</span></div>
+            </label>
+        </div>
+        <input type = "hidden" name = "paymoney" id = "paymoney" value = "1">
+        <div class="choose_btn"><input type="submit" value="立即支付"></div>
+      </form>
+    </div>
+</body>
+<script type="text/javascript" src="{$Think.const.JS_URL}/jquery-1.10.1.min.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){
+	$("label").click(function(){
+		$("label").removeClass("selected");
+		$(this).addClass("selected");
+    var sss =$("[class=selected]").attr("for");
+    var aaa =$("#"+sss).val(); 
+    document.getElementById('paymoney').value = aaa;
+      	});
+	});
+</script>
+
+
+
+
+
+
+</html>

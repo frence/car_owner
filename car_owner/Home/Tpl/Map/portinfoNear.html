@@ -1,0 +1,238 @@
+<!doctype html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,minimum-scale=1.0,user-scalable=no" />
+        <meta name="MobileOptimized" content="320" />
+        <meta name="description" content="" />
+        <meta name="keywords" content="" />
+        <meta name="format-detection" content="telephone=no">
+        <title>附近洗车场</title>
+        <link type="text/css" rel="stylesheet" href="{$Think.const.CSS_URL}style.css" />
+        <script charset="utf-8" src="http://map.qq.com/api/js?v=2.exp&key=IFEBZ-MF5HU-IXOVH-2JWRJ-JCKCK-CAFO5&libraries=drawing,geometry,autocomplete,convertor"></script>
+        <script type="text/javascript" src="{$Think.const.JS_URL}jquery-1.10.1.min.js"></script>
+        <script type="text/javascript" src="{$Think.const.JS_URL}common/language.js" ></script>
+        <script type="text/javascript" src="{$Think.const.SITE_URL}Public/layer20/layer.js"></script>
+        <script>
+                    function getPortinfolist(){
+                    var ParkName = document.getElementById('ParkName').value;
+                            location.href = "index.php?m=Map&a=portinfolist&ParkName=" + ParkName;
+                    }
+
+            //定位自身坐标
+            function getLocation(){
+            if (navigator.geolocation){
+
+            navigator.geolocation.getCurrentPosition(showPosition);
+            } else{
+            x.innerHTML = "浏览器不支持定位.";
+            }
+            }
+
+            function showPosition(position){
+            //定位地图中心点
+            var lat = position.coords.latitude;
+                    var lng = position.coords.longitude;
+                    location.href = "index.php?m=Map&a=portinfolist&lat=" + lat + "&lng=" + lng;
+            }
+        </script>
+    </head>
+
+    <body style="padding:0 0 45px;background:#efefef;">
+        <div class="main">
+            <if condition="$message neq 'null'"> 
+                <div class="all-num">附近洗车点总数：<span style="color:#ff0000;">{$count}个</span></div>
+                <div class="attention_wrap">
+                    <ul>
+                        <volist name="list" id="v1">
+                            <if condition="$v1['Status'] eq '1'">
+                                <li>  
+                                    <div class="attention_l_list" >
+                                        <a href="index.php?m=Map&a=map&ParkId={$v1['ParkId']}">
+                                            <p class="attention_l_a">{$v1['ParkName']}</p>
+                                        </a>
+                                        <p class="attention_l_d">
+                                            <span>地址：</span>
+                                            <font>{$v1['ParkAddress']}</font>
+                                        </p>
+                                        <p class="attention_r_p2_list">
+                                            <span>服务类型：</span>
+                                            <font>
+                                        <if condition="$v1['ServiceType'] eq 0" >
+                                            自助洗
+                                            <elseif condition="$v1['ServiceType'] eq 1"/>
+                                            帮忙洗
+                                        </if>
+                                        </font>
+                                        </p>
+                                        <!--<p class="attention_r_p2_list">
+                                            <span>电话：</span>
+                                            <a href="tel:{$v1['OP']}">{$v1['OP']}</a>
+                                        </p>-->
+                                        <p class="pass">
+                                            <span style="float:left">状态：
+                                                <font style="color:red;">
+                                                <if condition="$v1['free'] eq 0">
+                                                    繁忙
+                                                    <else/>
+                                                    空闲
+                                                </if>
+                                                </font>
+                                            </span>
+                                        </p>
+                                        <p class="pass">
+                                            <span style="float:left">设备数：
+                                                <font style="color:red;">
+                                                {$v1['WasherNum']}
+                                                </font>
+                                            </span>
+                                        </p>
+                                        <p class="attention_r_p2_list">
+                                            <span>场地类型：</span>
+                                            <font>
+                                        <if condition="$v1['port_type_id'] eq 0" >
+                                            自营
+                                            <elseif condition="$v1['port_type_id'] eq 1"/>
+                                            汽车服务联盟商家
+                                            <elseif condition="$v1['port_type_id'] eq 2"/>
+                                            政府
+                                            <elseif condition="$v1['port_type_id'] eq 3"/>
+                                            企业
+                                            <elseif condition="$v1['port_type_id'] eq 4"/>
+                                            社区
+                                            <elseif condition="$v1['port_type_id'] eq 5"/>
+                                            高校
+                                            <elseif condition="$v1['port_type_id'] eq 6"/>
+                                            商超
+                                            <elseif condition="$v1['port_type_id'] eq 7"/>
+                                            加油站
+                                            <elseif condition="$v1['port_type_id'] eq 8"/>
+                                            高速服务区
+                                            <elseif condition="$v1['port_type_id'] eq 9"/>
+                                            公共区域
+                                            <elseif condition="$v1['port_type_id'] eq 10"/>
+                                            政府(不对外提供服务)
+                                            <elseif condition="$v1['port_type_id'] eq 11"/>
+                                            高新园区
+                                            <else />
+                                            待定={$list['port_type_id']}
+                                        </if>
+                                        </font>
+                                        </p>
+                                        <!--<p class="pass">
+                                             <span class="pass_spanbtn">
+                                             <if condition="$v1['customerparkid'] eq 0">
+                                             <a class="tj_gz" href="#" 
+                                             onclick = "attention({$v1['ParkId']})">添加关注</a>
+                                             <else/>
+                                             <a  href="#" 
+                                             onclick = "unselect({$v1['customerparkid']})">取消关注</a>
+                                             </if>
+                                             </span>
+                                             <span class="pass_spanbtn">
+                                                 <a class="pj_btn" href="{:U('Map/cardetails')}?ParkId={$v1['ParkId']}">评价</a>
+                                             </span>
+                                             <span class="pass_spanbtn">
+                                                 <a href="index.php?m=Map&a=map&ParkId={$v1['ParkId']}">我要过去</a>
+                                             </span>
+             
+                                         </p>-->
+                                        <p class="btn-all">
+                                            <a class="btn-field" href="index.php?m=Map&a=cardetails&ParkId={$v1['ParkId']}"><span>场地详情</span></a>
+                                        <if condition="$v1['customerparkid'] eq 0">
+                                            <a class="btn-follow" href="javascript:void(0);" onclick = "attention({$v1['ParkId']}, this)">
+                                                <span>关注</span>
+                                            </a>
+                                            <else/>
+                                            <a class="btn-follow" href="javascript:void(0);" onclick = "unselect({$v1['ParkId']}, this)">
+                                                <span>取消关注</span>
+                                            </a>
+                                        </if>
+                                        <a class="btn-navigation" href="index.php?m=Map&a=Navigate&ParkId={$v1['ParkId']}"><span>导航</span></a>
+                                        </p>
+
+                                    </div>
+                                </li>
+                                <else />
+                                <li class="no">
+                                    <div class="attention_l_list">
+                                        <a href="index.php?m=Map&a=map&ParkId={$v1['ParkId']}">
+                                            <p class="attention_l_a">{$v1['ParkName']}</p>
+                                        </a>
+                                        <p class="attention_l_d">
+                                            <span>地址：</span>
+                                            <font>{$v1['ParkAddress']}</font>
+                                        </p>
+                                        <p class="attention_r_p2_list">
+                                            <span>电话：</span>
+                                            <a href="tel:{$v1['OP']}">{$v1['OP']}</a>
+                                        </p>
+                                        <p class="pass"><a href="#">暂停服务</a></p>
+                                    </div>
+                                </li>
+                            </if>
+                        </volist>
+                    </ul>
+                </div>
+                <else />
+                <div class="nomessage-wrap">
+                    <div class="nomessage-h"><img src="{$Think.const.IMG_URL}nomessagepic.gif"></div>
+                    <div class="nomessage-text">
+                        对不起<br>您周边三公里以内暂无洗车点
+                    </div>
+                    <div class="nomessage-btn"><a href="{:U('map/portinfoindex')}">查看本地洗车点</a></div>
+                </div>
+            </if>
+        </div>
+        <div class="fixed">
+            <a class="fixed-left" href="{:U('Public/index')}">返回首页</a>
+            <!--<a class="fixed-middle" onclick="getLocation()">附近</a>-->
+            <a class="fixed-right" href="{:U('map/portinfoindex')}">洗车场列表</a>
+        </div>
+    </body>
+</html>
+<script type="text/javascript">
+//添加关注
+            function attention(ParkId, obj){
+            $.post('index.php?m=Map&a=attention', {"ParkId":ParkId}, function (msg){
+            if (msg == 1){
+            parent.layer.msg(prompt_map_success, {icon: 1, time: 500});
+                    $(obj).removeAttr("onclick");
+                    $(obj).attr('onclick', 'unselect(' + ParkId + ',this)');
+                    var temp = $(obj).find('span');
+                    $(temp[0]).html('取消关注');
+                    // $(temp[0]).html('取消关注')；
+                    //location.reload();
+            } else if (msg == 0){
+            parent.layer.msg(prompt_map_error, {icon: 5, time: 500});
+                    //location.reload();
+            } else if (msg == 2){
+            parent.layer.msg(prompt_map_attention, {icon: 5, time: 500});
+                    //location.reload();
+            } else{
+            parent.layer.msg(prompt_map_openid, {icon: 5, time: 500});
+                    //location.reload();
+            }
+            });
+                    }
+
+//取消关注
+    function unselect(customerparkid, obj){
+    $.post('index.php?m=Attention&a=unselect', {"customerparkid":customerparkid}, function(msg) {
+
+    if (msg == 1){
+    parent.layer.msg("取消成功！", {icon: 1, time: 500});
+            $(obj).removeAttr("onclick");
+            $(obj).attr('onclick', 'attention(' + customerparkid + ',this)');
+            var temp = $(obj).find('span');
+            $(temp[0]).html('关注');
+            //$(temp[0]).html('关注')；
+            //location.reload();
+    } else{
+    parent.layer.msg("取消失败！", {icon: 5, time: 500});
+            //location.reload();
+    }
+    });
+            }
+</script>

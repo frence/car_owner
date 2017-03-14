@@ -1,0 +1,76 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,minimum-scale=1.0,user-scalable=no" />
+<meta name="MobileOptimized" content="320" />
+<meta name="description" content="" />
+<meta name="keywords" content="" />
+<meta name="format-detection" content="telephone=no" />
+<title>易自助</title>
+<link type="text/css" rel="stylesheet" href="{$Think.const.CSS_URL}style.css" />
+<script type="text/javascript" src="{$Think.const.JS_URL}jquery-1.7.1.min.js"></script>
+<style type="text/css">
+body{background:#f2f2f2;}
+</style>
+</head>
+
+<body>
+  <div class="main" style="position:relative;">
+	<div class="sj_banner">
+    	<div class="slider">
+            <ul>
+              <volist name="flash" id="vo">
+                <li><a href="{$vo.TargetLink}"><img src="{:C('PAGEFLASH_URL')}{$vo.BigFileName}" alt="{$vo.AltText}"></a></li>
+              </volist>
+            </ul>
+        </div>
+    </div>
+    
+    <div class="sj_nav_wrap">
+        <div class="sj_nav">
+            <a class="sb" href="index.php?m=map&a=map" title="附件设备"></a>
+            <a class="zh" href="index.php?m=account&a=account" title="我的账户"></a>
+            <a class="gz" href="index.php?m=attention&a=attention" title="我的关注"></a>
+            <a class="gr" href="index.php?m=person&a=index" title="个人中心"></a>
+        </div>
+        <div class="sj_index_ewm"><a href="index.php?m=qrcode&a=qrcode" title="二维码">
+          <img src="{$Think.const.IMG_URL}ewm_a.jpg" alt="易自助二维码扫描">
+        </a>
+      </div>
+    </div>
+
+    <div class="nb_wrap"></div>
+    <div class="nb">
+        <div class="nb_1">
+          <img src="{$Think.const.IMG_URL}hdpic.png">
+            <div class="nb_1_colse">
+              <a id="colse_a" href="javascript:void(0);">
+                <img src="{$Think.const.IMG_URL}gbpic.png">
+              </a>
+            </div>
+            <div class="nb_1_qq">10</div>
+            <div class="nb_1_rq">2015-10-10</div>
+            <div class="nb_1_tx">
+              <p>福建易联众电子科技有限公司:</p>
+                <p style="margin:15px 0 0;color:#c42416;">福建易联众电子科技有限公司恭祝大家中秋节快乐，阖家幸福！</p>
+                <p style="margin:10px 0 0; text-align:right;">2015-09-30</p>
+            </div>
+        </div>
+    </div>
+</div>   
+</body>
+</html>
+<script type="text/javascript" src="{$Think.const.JS_URL}yxMobileSlider.js"></script>
+<script>
+  $(".slider").yxMobileSlider({width:640,height:320,during:5000})
+</script>
+<script type="text/javascript">
+$(document).ready(function(){
+  $(".nb_wrap,.nb").show();
+  $("#colse_a").click(function(){
+      $(".nb_wrap,.nb").hide();
+    });
+});
+</script>

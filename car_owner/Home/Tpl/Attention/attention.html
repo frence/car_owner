@@ -1,0 +1,79 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,minimum-scale=1.0,user-scalable=no" />
+<meta name="MobileOptimized" content="320" />
+<meta name="description" content="" />
+<meta name="keywords" content="" />
+<title>我的关注</title>
+<link type="text/css" rel="stylesheet" href="{$Think.const.CSS_URL}style.css" />
+<script type="text/javascript" src="{$Think.const.JS_URL}jquery-1.10.1.min.js"></script> 
+</head>
+
+<body>
+	<div class="main">
+    	<div class="attention_wrap_head"><span>已关注<b>{$countpark}</b>家洗车店</span></div>
+    	<div class="attention_wrap">
+        	<ul>
+                <if condition="$message eq 'null'">
+                    <div class="messages_text">无关注洗车场信息！</div>
+                    <div class="messages_img">
+                        <img src="{$Think.const.IMG_URL}messagebg.gif" alt=""/>
+                    </div>
+                </if>
+
+
+
+
+             <volist name="list"   id="V1">
+            	<li>
+                	<div class="attention_l" onclick="cardetails({$V1.ParkId})">
+                    	<p class="attention_l_a">{$V1['ParkName']}</p>
+                        <p class="attention_l_b">星级评价<span><img src="{$Think.const.IMG_URL}el{$V1['Score']}.png"></span></p>
+                        <p class="attention_l_c">忙闲状态：
+                            <if condition="$V1['free'] eq 0">
+                            <span><font>繁忙</font></span>
+                            <else/>
+                            <span>空闲</span>
+                            </if>
+                        </p>
+                    </div>
+                    <div class="attention_r">
+                    	<p>自助洗<span>{$V1['price_self']}元</span></p>
+                        <if condition="$V1['ServiceType'] eq 1">
+                        <p>帮忙洗<span>{$V1['price_help']}元</span></p>
+                        </if>
+                        <p class="attention_r_p2"><input type="button" value="取消关注" onclick = "unselect({$V1.customerparkid})" ></p>
+                    </div>
+                </li>
+             </volist>
+            </ul>
+        </div>
+    </div>
+</body>
+</html>
+<script type="text/javascript">
+    function unselect(obj){
+        var customerparkid = obj;
+        $.post('index.php?m=Attention&a=unselect', {"customerparkid":customerparkid}, function(msg) { 
+            if(msg == 1){
+                alert("取消成功！");
+                location.reload(true);
+                return;
+            }else{
+                alert("取消失败！");
+                return;
+            }
+        });
+    }
+
+
+    function cardetails(obj){
+        var ParkId = obj;
+        location.href="index.php?m=Map&a=cardetails&ParkId="+ParkId;
+    }
+
+
+</script>

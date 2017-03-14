@@ -1,0 +1,431 @@
+<!doctype html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,minimum-scale=1.0,user-scalable=no" />
+        <meta name="MobileOptimized" content="320" />
+        <meta name="description" content="" />
+        <meta name="keywords" content="" />
+        <meta name="format-detection" content="telephone=no" />
+        <title>我的账户</title>
+        <link type="text/css" rel="stylesheet" href="{$Think.const.CSS_URL}style.css" />
+        <link type="text/css" rel="stylesheet" href="{$Think.const.CSS_URL}idangerous.swiper.css" />
+
+        <!-- <script type="text/javascript" src="{$Think.const.JS_URL}Account/account.js"></script> -->
+        <style type="text/css">
+            body{background:#ebebeb;padding:0 0 2.2em} 
+        </style>
+    </head>
+
+    <body onload="getSkin({$skin})" style="padding: 0 0 20%;">
+        <!-- 隐藏域 -->
+        <input type="hidden" name='id' id='id'>
+
+        <!--隐藏域END-->
+        <div class="main">
+            <div class="wrap">
+                <div class="tabs">
+                    <a class="tabs_a active" href="#" hidefocus="true">账户</a>
+                    <a class="tabs_b" href="#" id="c" name = "c" hidefocus="true">抵用券</a>
+                    <a class="tabs_b" href="#" hidefocus="true">卡券</a>
+                    <a class="tabs_b" href="#" hidefocus="true">福利</a>
+                </div>    
+                <div class="swiper-container">
+                    <div class="swiper-wrapper">
+                        <div class="swiper-slide">
+                            <div class="account_head">
+                                <div class="account_head_je">
+                                    <div class="account_head_je_tx">
+                                        <p style="font-size:20px">￥</p>
+                                        <p style="font-size:24px"><b>{$info['allmoney']}</b></p>
+                                        <p>账户余额</p>
+                                    </div>
+                                </div>
+                                <div class="account_head_mx"><a href="{:U('Account/zhmx')}">账户明细</a></div>
+                                <div class="account_head_fk"><a href="{:U('Person/advice')}">意见反馈</a></div>
+                            </div>
+                            <div class="account_je"><span>￥<b>{$info['wallet']}</b></span>现金金额</div>
+                            <div class="account_xjje"><span>￥<b>{$info['othermoney']}</b></span>抵用券金额</div>
+                            <div class="account_xjje" style="background:#fff url('{$Think.const.IMG_URL}/kq.png') no-repeat 10px center;background-size: 20px auto;"><span><b>{$info['balance_gift']}</b> 张</span>卡券</div>
+                            <div class="account_zf">
+                                <h3>支付方式</h3>
+                                <div class="account_zf_wx"><input type="checkbox" checked id="" name="">微信支付</div>
+                                <div class="account_zf_zfb"><!-- <input type="checkbox" id="" name=""> -->支付宝支付</div>                        
+                                <div class="account_zf_yl"><!--<input type="checkbox" id="" name="">-->银联支付</div>
+                                <div class="account_zf_btn"><button onClick="javascript:window.location.href = '?m=Weixinpays&a=paymoney'">我要充值</button></div>
+                            </div>
+                        </div>
+                        <div class="swiper-slide">
+                            <div class="account_head">
+                                <div class="account_head_je">
+                                    <div class="account_head_je_tx">
+                                        <p style="font-size:20px">￥</p>
+                                        <p style="font-size:24px"><b>{$info['othermoney']}</b></p>
+                                        <p>抵用券</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="account_head_xjq"><a href="{:U('Account/sysm')}">抵用券使用说明</a>有<span>{$countrecord}</span>张抵用券即将过期</div>
+                            <volist name="list" id="v1">
+                                <div class="account_xjq_sm">
+                                    <div class="account_xjq_sm_l">
+                                        <span>￥</span><font>{$v1['Cost']}</font>
+                                    </div>
+                                    <div class="account_xjq_sm_r">
+                                        <span class="yisy"><if condition="$v1.status eq 1">
+                                                有效
+                                                <elseif condition="$v1.status eq 2" />
+                                                已过期
+                                                <else />
+                                                已使用
+                                            </if></span>
+                                        <p>{$v1['businessname']}</p>
+                                        <ul>
+                                            <li>可抵用现金使用</li>
+                                            <li>限本手机号使用</li>
+                                            <!-- <li>剩余可用余额{$v1['balance']}元</li> -->
+                                            <li class="li_color">有效期至{$v1['enddate']}</li>
+                                            
+                                        </ul>
+                                    </div>
+                                </div>
+                            </volist>
+                        </div>
+                        <div class="swiper-slide slidethird" style="background:#fff;">
+                            <div class="kq-head">
+                                <a class="on" href="javascript:void(0)" style="width:32.5555%">可用</a>
+                                <a href="javascript:void(0)" style="width:32.5555%">已使用</a>
+                                <a href="javascript:void(0)" style="width:32.5555%">失效</a>
+
+                            </div>
+                            <div class="tabwrap">
+
+                                <div class="menu show">
+                                    <if condition="empty($list_card_gift_Y)">
+                                        <div class="messages_text" style="margin:20% 0 0;">没有可用的卡券！</div>
+                                        <div class="messages_img">
+                                            <img src="{$Think.const.IMG_URL}messagebg.png" alt=""/>
+                                        </div>
+                                    </if>
+                                    <volist name='list_card_gift_Y' id='vlcgy'>
+                                        <div <if condition='$vlcgy.ordertypeid eq 1'>
+                                                class="green-coupon"
+                                                <elseif condition='$vlcgy.ordertypeid eq 2' />
+                                                class="red-coupon"
+                                                <elseif condition='$vlcgy.ordertypeid eq 3' />
+                                                class="orange-coupon"
+                                                <else />
+                                                class="blue-coupon"
+                                            </if>
+                                            >
+                                            <div class="coupontop">
+                                                <div class="coupontop-left">
+                                                    <p>{$vlcgy.gift_name}</p>
+                                                    <p>编号：{$vlcgy.gift_code}</p>
+                                                </div>
+                                                <div class="coupontop-right">
+
+                                                    <a href='{:U("Account/cardgift")}?id={$vlcgy.GiftId}'>立即使用</a>
+                                                </div>
+                                            </div>
+                                            <div class="couponbottom">有效期至：
+                                                <if condition='$vlcgy.enddate eq 0'>
+                                                    长久有效
+                                                    <else />
+                                                    {$vlcgy.enddate| date="Y-m-d",###}
+                                                </if>
+                                            </div>
+                                        </div>
+                                    </volist>
+                                </div>
+                                <div class="menu">
+                                    <if condition="empty($list_card_gift_O)">
+                                        <div class="messages_text" style="margin:20% 0 0;">没有已使用的卡券！</div>
+                                        <div class="messages_img">
+                                            <img src="{$Think.const.IMG_URL}messagebg.png" alt=""/>
+                                        </div>
+                                    </if>
+                                    <volist name='list_card_gift_O' id='vlcgo'>
+                                        <div <if condition='$vlcgo.ordertypeid eq 1'>
+                                                class="green-coupon"
+                                                <elseif condition='$vlcgo.ordertypeid eq 2' />
+                                                class="red-coupon"
+                                                <elseif condition='$vlcgo.ordertypeid eq 3' />
+                                                class="orange-coupon"
+                                                <else />
+                                                class="blue-coupon"
+                                            </if>
+                                            >
+                                            <div class="coupontop">
+                                                <div class="coupontop-left">
+                                                    <p>{$vlcgo.gift_name}</p>
+                                                    <p>编号：{$vlcgo.gift_code}</p>
+                                                </div>
+                                                <div class="coupontop-right">
+
+                                                    <a  class="useless" href='javascript:void(0);'>已使用</a>
+                                                </div>
+                                            </div>
+                                            <div class="couponbottom">使用时间：
+                                                <if condition='$vlcgo.enddate eq 0'>
+                                                    长久有效
+                                                    <else />
+                                                    {$vlcgo.lasttime| date="Y-m-d H:i",###}
+                                                </if>
+                                            </div>
+                                        </div>
+                                    </volist>
+
+
+                                </div>
+                                <div class="menu">
+                                    <if condition="empty($list_card_gift_N)">
+                                        <div class="messages_text" style="margin:20% 0 0;">没有失效的卡券！</div>
+                                        <div class="messages_img">
+                                            <img src="{$Think.const.IMG_URL}messagebg.png" alt=""/>
+                                        </div>
+                                    </if>
+                                    <volist name='list_card_gift_N' id='vlcgn'>
+                                        <div <if condition='$vlcgn.ordertypeid eq 1'>
+                                                class="green-coupon"
+                                                <elseif condition='$vlcgn.ordertypeid eq 2' />
+                                                class="red-coupon"
+                                                <elseif condition='$vlcgn.ordertypeid eq 3' />
+                                                class="orange-coupon"
+                                                <else />
+                                                class="blue-coupon"
+                                            </if>
+                                            >
+                                            <div class="coupontop">
+                                                <div class="coupontop-left">
+                                                    <p>{$vlcgn.gift_name}</p>
+                                                    <p>编号：{$vlcgn.gift_code}</p>
+                                                </div>
+                                                <div class="coupontop-right">
+
+                                                    <a class="useless" href='javascript:void(0);'>已经失效</a>
+                                                </div>
+                                            </div>
+                                            <div class="couponbottom">有效期至：
+                                                <if condition='$vlcgn.enddate eq 0'>
+                                                    长久有效
+                                                    <else />
+                                                    {$vlcgn.enddate| date="Y-m-d",###}
+                                                </if>
+                                            </div>
+                                        </div>
+                                    </volist>
+
+
+                                </div>
+                            </div>
+                        </div>
+                        <div class="swiper-slide" style="background:#fff;">
+                            <if condition="empty($list_Fuli)">
+                                <div class="nomessage-wrap">
+                                    <div class="nomessage-h"><img src="{$Think.const.IMG_URL}nomessagepic.gif"></div>
+                                    <div class="nomessage-text">
+                                        暂无福利券
+                                    </div>
+
+                                </div>
+
+                                <else />
+                                <div class="fuli">
+
+                                    <ul>
+                                        <volist name="list_Fuli" id="vlf">
+                                            <li>
+                                                <div class="fuli-l"><img src="{$Think.const.ADIMG_URL}{$vlf.batch_pic}"></div>
+                                                <div class="fuli-m">
+                                                    <p>{$vlf.package_name}</p>
+                                                    <p>{$vlf.activity_idea}</p>
+                                                    <p><a class="aat" href="#" valset='{$vlf.batch_no}'>活动规则详情》</a></p>
+                                                </div>
+                                                <div class="fuli-r"><a onclick="fuli_a()" href="javascript:void(0);" >领取</a></div>
+                                            </li>
+                                        </volist> 
+                                    </ul>
+                                </div>
+                            </if>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="foot-back"><a href="?m=Public&a=index">返回首页</a></div> 
+        </div>
+        <div class="nb_wrap_a"></div>
+        <div class="nb_a">
+            <div class="nb_1_a">
+
+                <div class="quan-head">
+                    <img id="img1" src="{$Think.const.IMG_URL}tc-q-head.png">
+                </div>
+                <div class="nb_1_colse_a" style="width:10%;top:-6px;"><a id="colse_a" href="javascript:void(0);"><img src="{$Think.const.IMG_URL}b-close.png"></a></div>
+                <div class="quan-tx" style="top:30%">
+                    <input class="q-inp" id="fulima" placeholder="请输入您的福利码">
+                </div>
+                <div class="quan-tx2" style="top:49%">
+                    <input class="q-inp2" id="tel" placeholder="请输入您的手机号" maxlength="11">
+                </div>
+                <div class="quan-line"></div>
+                <div class="quan-button"><a class="btn-fuli" href="javascript:void(0);" onclick="DrawWeal()">领取福利</a></div>
+            </div>
+        </div>
+
+        <div class="nb_wrap_b"></div>
+        <div class="nb_b">
+            <div class="nb_1_b">
+                <div class="quan-head">
+                    <img id="img1" src="{$Think.const.IMG_URL}tc-q-head.png">
+                </div>
+                <div class="nb_1_colse_b" style="width:10%;top:-6px;">
+                    <a id="colse_b" href="javascript:void(0);"><img src="{$Think.const.IMG_URL}b-close.png"></a>
+                </div>
+                <div class="quan-tx">
+                    <p>恭喜你！</p>
+                    <p>获得一份<span>礼包。</span></p>
+                </div>
+                <div class="quan-tx2" style="top:49%">
+                    <p class="ck">可到<font>卡券</font>中查看礼券。</p>
+                </div>
+                <div class="quan-line"></div>
+                <div class="quan-button"><a class="btn-know" href="javascript:void(0);">我知道了</a></div>
+            </div>
+        </div>
+        <div class="nb_wrap_c"></div>
+        <div class="nb_c">
+            <div class="nb_1_c">
+                <div class="quan-head">
+                    <img id="img1" src="{$Think.const.IMG_URL}tc-q-head.png">
+                </div>
+                <div class="nb_1_colse_c" style="width:10%;top:-6px;">
+                    <a id="colse_c" href="javascript:void(0);"><img src="{$Think.const.IMG_URL}b-close.png"></a>
+                </div>
+                <div class="aat-quan-tx">
+
+                </div>
+            </div>
+        </div> 
+    </body>
+</html>
+
+<script type="text/javascript" src="{$Think.const.JS_URL}jquery-1.10.1.min.js"></script> 
+<script type="text/javascript" src="{$Think.const.SITE_URL}Public/layer20/layer.js"></script> 
+<script type="text/javascript" src="{$Think.const.JS_URL}idangerous.swiper.min.js"></script>
+<script type="text/javascript" src="{$Think.const.JS_URL}tabsSwiper.js"></script>
+<script type="text/javascript">
+                            $(".swiper-slide,.swiper-wrapper").css("height", "auto");
+                            var bodyheight = $(".main").height();
+//alert(bodyheight)
+                            $(".slidethird").height(bodyheight)
+</script>
+
+<script type="text/javascript">
+            $(document).ready(function(){
+    var ss = location.href;
+            if (ss.indexOf("part=3") >= 0){
+    $(".tabs a").removeClass("active");
+            var map = $(".tabs a");
+            $(map[2]).addClass("active");
+            tabsSwiper.swipeTo(2);
+    }
+    })
+            $(".kq-head a").each(function(index){
+    $(this).click(function(){
+    $(".show").parent().parent().height("auto");
+            var anode = $(this);
+            $(".show").removeClass("show");
+            $(".on").removeClass("on");
+            $(anode).addClass("on");
+            $(".tabwrap div.menu").eq(index).addClass("show")
+    })
+            });
+            function getSkin(skin){
+            if (skin == 1){
+            tabsSwiper.swipeTo(1)
+            }
+            }
+    function fuli_a(){
+    var nbwrapheight = $("body").height();
+            $(".nb_wrap_a").height(nbwrapheight)
+            $(".nb_wrap_a,.nb_a").show();
+    };
+            $("#colse_a").click(function(){
+    $(".nb_wrap_a,.nb_a").hide();
+    });
+            $(".btn-fuli").click(function(){
+    var tel = $("#tel").val();
+            var fulima = $("#fulima").val();
+            var id = $("#id").val();
+            re = /^0?1[3|4|5|7|8][0-9]\d{8}$/;
+            if (tel == ""){
+    layer.msg('手机号不能为空', {icon: 5, time: 1000});
+            return false;
+    } else if (!re.test(tel)){
+    layer.msg('请输入正确的手机号', {icon: 5, time: 1000});
+            return false;
+    }
+
+    layer.load();
+            //post('?m=Account&a=drawFuli',{"id":id,"code":fulima,"tel":tel});
+            $.post('?m=Account&a=drawFuli', {"id":id, "code":fulima, "tel":tel}, function(msg){
+            k = parseInt(msg);
+                    layer.closeAll('loading');
+                    switch (k){
+            case 1: $(".nb_wrap_a,.nb_a").hide();
+                    var nbwrapheightb = $("body").height();
+                    $(".nb_wrap_b").height(nbwrapheightb)
+                    $(".nb_wrap_b,.nb_b").show();
+                    break;
+                    case - 1:layer.msg('礼包号错误', {icon: 5, time: 1000}); break;
+                    case - 2:layer.msg('该手机号不是我们的客户', {icon: 5, time: 1000}); break;
+                    case - 3:layer.msg('系统忙,请稍后再试', {icon: 5, time: 1000}); break;
+                    case - 4:layer.msg('该用户已经领过该礼包', {icon: 5, time: 1000}); break;
+                    default:layer.msg('系统忙,请稍后再试', {icon: 5, time: 1000}); break;
+            }      });
+    });
+            $("#colse_b").click(function(){
+    $(".nb_wrap_b,.nb_b").hide();
+            location.reload();
+    });
+            $(".btn-know").click(function(){
+
+    window.location.href = '?m=Account&a=account&part=3';
+    })
+            //虚拟表单提交
+                    function post(URL, PARAMS) {
+                    var temp = document.createElement("form");
+                            temp.action = URL;
+                            temp.method = "post";
+                            temp.style.display = "none";
+                            for (var x in PARAMS) {
+                    var opt = document.createElement("textarea");
+                            opt.name = x;
+                            opt.value = PARAMS[x];
+                            // alert(opt.name)
+                            temp.appendChild(opt);
+                    }
+                    document.body.appendChild(temp);
+                            temp.submit();
+                            return temp;
+                            }
+            $(".aat").click(function(){
+            layer.load();
+                    var code = $(this).attr("valset");
+                    $.post('?m=Account&a=getIntroBycode', {"code":code}, function(msg){
+
+                    layer.closeAll('loading');
+                            $(".aat-quan-tx").html(msg);
+                            $(".nb_wrap_c,.nb_c").hide();
+                            var nbwrapheightb = $("body").height();
+                            $(".nb_wrap_c").height(nbwrapheightb)
+                            $(".nb_wrap_c,.nb_c").show();
+                    });
+                    });
+                    $("#colse_c").click(function(){
+            $(".nb_wrap_c,.nb_c").hide();
+                    });
+</script>

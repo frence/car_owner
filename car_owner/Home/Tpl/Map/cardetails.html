@@ -1,0 +1,190 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,minimum-scale=1.0,user-scalable=no" />
+<meta name="MobileOptimized" content="320" />
+<meta name="description" content="" />
+<meta name="keywords" content="" />
+<title>{$ParkName}</title>
+<link type="text/css" rel="stylesheet" href="{$Think.const.CSS_URL}style.css" />
+<script charset="utf-8" src="http://map.qq.com/api/js?v=2.exp&key=IFEBZ-MF5HU-IXOVH-2JWRJ-JCKCK-CAFO5&libraries=drawing,geometry,autocomplete,convertor"></script>
+</head>
+
+<!--隐藏域 -->
+<input type='hidden' id='imgurl' name='imgurl' value="{$Think.const.IMG_URL}" />
+<!--隐藏域END-->
+<body style="background:#efefef;">
+    <div class="main">
+        <div class="field-top">
+            <div class="field-top-titile">{$ParkName}</div>
+            <div class="field-top-summary">
+                <p><span>类型：</span><font maxlength="13">
+                    <if condition="$list['port_type_id'] eq 0" >
+                        自营
+                    <elseif condition="$list['port_type_id'] eq 1"/>
+                        汽车服务联盟商家
+                    <elseif condition="$list['port_type_id'] eq 2"/>
+                        政府
+                    <elseif condition="$list['port_type_id'] eq 3"/>
+                        企业
+                    <elseif condition="$list['port_type_id'] eq 4"/>
+                        社区
+                    <elseif condition="$list['port_type_id'] eq 5"/>
+                        高校
+                    <elseif condition="$list['port_type_id'] eq 6"/>
+                        商超
+                    <elseif condition="$list['port_type_id'] eq 7"/>
+                        加油站
+                    <elseif condition="$list['port_type_id'] eq 8"/>
+                        高速服务区
+                    <elseif condition="$list['port_type_id'] eq 9"/>
+                        公共区域
+                    <elseif condition="$list['port_type_id'] eq 10"/>
+                        政府(不对外提供服务)
+                    <elseif condition="$list['port_type_id'] eq 11"/>
+                        高新园区
+                    <else />
+                        待定
+                    </if>
+                </font><img class="rz" src="{$Think.const.IMG_URL}rz.gif"></p>
+                <div class="star" data-score="{$list['Score']}"><span class="star-span">星级评价：</span></div>
+                <p style="margin:0;"><span style="width:75px;">设备状态：</span><font style="color:red;width:60%;">
+                <if condition="$list['free'] eq 0">
+                    繁忙
+                    <else/>
+                    空闲
+                </if>
+                </font></p>
+            </div>
+            <div class="field-top-service">
+                <p>服务模式：{$service_modl.OP}</p>
+                <p><font>{$service_modl.remark}</font></p>
+                <!--<p><font>{$service_modl.start_time_help}-{$service_modl.end_time_help}</font>  人工洗服务，按店内标价收费</p>
+                <p style="margin:0;"><font>{$service_modl.start_time_self}-{$service_modl.end_time_self}</font>  自助洗服务</p>-->
+
+            </div>
+            <div class="field-top-address">
+                <a href='index.php?m=Map&a=Navigate&ParkId={$list['ParkId']}'><p><span>详细地址：</span><font>{$list['ParkAddress']}</font></p></a>
+            </div>
+        </div>
+        <div class="field-bottom">
+            <div class="field-bottom-tab">
+                <a class="on" href="javascript:void(0)"><span class="bg-1">优惠介绍</span></a>
+                <a href="javascript:void(0)"><span class="bg-2">评价</span></a>
+            </div>
+            <div class="tab-wrap">
+                <div class="tab-wrap-content none">
+                    <div class="tab-yh-main">
+                        <!--<h2>私家车（五座）服务：</h2>-->
+                        <ul>
+
+                            <!--<li><span>180 元</span>1 私家车内室清洗</li>-->
+                            <volist name='list_benefit' id='vpm_font'>
+                                <if condition='$vpm_font.msg_type neq 2'>
+                                    <li>{$vpm_font.titile}</li>
+                                </if>
+                            </volist>
+                        </ul>
+                        <div class="tab-yh-quan tab-yh-img">
+                            <!--
+                                    <img src="images/yh-quan.gif">
+                                    <div class="tab-yh-quan-content">
+                                        <p>易自助·金山车迷保姆·汽车服务联盟商家</p>
+                                        <p style="font-size:18px;">汽车服务 9.5折券</p>
+                                        <p>易自用户可凭该券享受该商家以上项目9.5折优惠</p>
+                                    </div>
+                            -->
+                             <volist name='list_benefit' id='vpm_pic'>
+                                <if condition='$vpm_pic.msg_type eq 2'>
+                                    <img src="{$Think.const.ADIMG_URL}{$vpm_pic.image_url}">
+                                
+                            
+                               </if>
+                            </volist>
+                        </div>
+                        <!--<div class="check">查看59次</div>-->
+                    </div>
+                </div>
+                <div class="none">
+                    <ul class="tab-pj-ul">
+                        <volist name='list3' id='vscore'>
+                            <li>
+                                <div class="tab-pj-use">
+                                    <p class="tab-pj-use-tel">{$vscore.tel}</p>
+                                    <p class="tab-pj-use-text">{$vscore.Title}</p>
+                                    <p class="tab-pj-use-time">{$vscore.addtime|date='Y-m-d h:i',###}</p>
+                                </div>
+                                <if condition="$vscore.reply neq ''">
+                                    <div class="tab-pj-service">
+                                        <p class="tab-pj-service-title">客服</p>
+                                        <p>{$vscore.reply}</p>
+                                    </div>
+                                </if>  
+                            </li>
+                        </volist> 
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="fixed">
+        <a class="fixed-left" href="{:U('Public/index')}">返回首页</a>
+        <!--<a class="fixed-middle" onclick="getLocation()">附近</a>-->
+        <a class="fixed-right" href="{:U('map/portinfoindex')}">洗车场列表</a>
+    </div>
+    </div>
+</body>
+</html>
+<script type="text/javascript" src="{$Think.const.JS_URL}jquery-1.10.1.min.js"></script>
+<script type="text/javascript" src="{$Think.const.JS_URL}jquery.raty.min.js"></script>
+<script type="text/javascript">
+    $(function() {
+      $.fn.raty.defaults.path = $("#imgurl").val();
+      $('.star').raty({
+          readOnly: true,
+          score: function() {
+            return $(this).attr('data-score');
+          }
+        });
+      $('.star').css('width','100%');
+    });
+    
+    /*$(".field-bottom-tab a").click(function(){
+        $(".field-bottom-tab a").removeClass("on");
+        $(this).addClass("on");
+        $("")
+    })*/
+    $(".field-bottom-tab a").each(function(index){
+        $(this).click(function(){
+            var anode = $(this);
+            $(".tab-wrap-content").removeClass("tab-wrap-content");
+            $(".on").removeClass("on");
+            $(anode).addClass("on");
+            $(".tab-wrap div.none").eq(index).addClass("tab-wrap-content")
+        })
+    });
+    //定位自身坐标
+    function getLocation(){
+      if (navigator.geolocation){
+
+          navigator.geolocation.getCurrentPosition(showPosition);
+        }else{
+          x.innerHTML="浏览器不支持定位.";
+        }
+    }
+
+    function showPosition(position){
+        //定位地图中心点
+       var lat=position.coords.latitude; 
+       var lng=position.coords.longitude;
+       location.href="index.php?m=Map&a=portinfoNear&lat="+lat+"&lng="+lng;
+    }
+    
+</script>
+
+
+
+
+
+

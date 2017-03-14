@@ -1,0 +1,50 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,minimum-scale=1.0,user-scalable=no" />
+<meta name="MobileOptimized" content="320" />
+<meta name="description" content="" />
+<meta name="keywords" content="" />
+<title>历史反馈</title>
+<link type="text/css" rel="stylesheet" href="{$Think.const.CSS_URL}style.css" />
+</head>
+
+<body style="background:#dcdedd;padding:0 0 5em;">
+	<div class="main">
+    	<div class="historymessage">
+        	<ul class="tab-pj-ul">
+                <if condition="$message eq 0">
+                    <div class="messages_text" style="color:#fff">暂无历史反馈！</div>
+                    <div class="messages_img">
+                        <img src="{$Think.const.IMG_URL}messagebg.gif" alt=""/>
+                    </div>
+                <else />
+                    <volist name="list" id='vo'>
+                        <li>
+                            <div class="tab-pj-use">
+                                <p class="tab-pj-use-tel">{$vo.booktime|date='Y-m-d h:i',###}</p>
+                                <p class="tab-pj-use-text">{$vo.content}</p>
+                                <!--<p class="tab-pj-use-time">2016-05-26 01:04</p>-->
+                            </div>
+                            
+
+                            <div class="tab-pj-service">
+                                <p class="tab-pj-service-title">客服</p>
+                                <if condition="$vo.status eq 0">
+                                    <p>等待处理中</p>
+                                <else />
+                                    <p>{$vo.processidea}</p>
+
+                                </if>
+                            </div>	
+                        </li>
+                    </volist>
+                </if>
+            </ul>
+        </div>
+        <div class="foot-back"><a href="?m=Public&a=index">返回首页</a></div>
+    </div>
+</body>
+</html>

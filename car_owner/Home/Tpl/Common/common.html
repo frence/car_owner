@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<block name="meta"></block>
+<block name="title"><title>{:C('WEB_SITE_NAME')} - {:L('userManagement')}</title></block>
+<block name="titleInclude">
+<css href="__P_CSS__/bootstrap.min.css" />
+<css href="__CSS__/global.css" />
+<js href="__P_JS__/jquery.min.js" /> 
+<js href="__P_JS__/bootstrap.min.js" />
+<js href="__P_JS__/common.js" />
+<js href="__JS__/global.js" />
+</block>
+<block name="header"></block>
+</head>
+<body>
+<!-- 头部 -->
+<block name="nav">
+<nav class="navbar navbar-inverse navbar-fixed-top">
+	<div class="container-fluid">
+		<div class="navbar-header">
+			<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false"
+				aria-controls="navbar">
+				<span class="sr-only">{:C('WEB_SITE_NAME')}</span> <span
+					class="icon-bar"></span> <span class="icon-bar"></span> <span
+					class="icon-bar"></span>
+			</button>
+			<a class="navbar-brand" href="__ROOT__">{:C('WEB_SITE_NAME')}</a>
+		</div>
+		<div id="navbar" class="navbar-collapse collapse">
+			<ul class="nav navbar-nav navbar-right">
+				<li><a href="#">{:L('set')}</a></li>
+				<li><a href="#">{:L('help')}</a></li>
+				<li><a href="{:U('user/login_out')}">{:L('login_out')}</a></li>
+			</ul>
+			<form class="navbar-form navbar-right">
+				<input type="text" class="form-control" placeholder="{:L('search')}">
+			</form>
+		</div>
+	</div>
+</nav>
+</block>
+<!-- /头部 -->
+<!-- 主体 -->
+
+
+<script type="text/javascript">
+
+</script>
+<div class="container-fluid">
+	<div class="row">
+		{// S - left }
+		<block name="left_body">
+		<div class="col-sm-3 col-md-2 sidebar">
+			<ul class="nav nav-sidebar">
+				<volist name=":C('USER_NAV')" id="nav">{//:dump($nav['name'])}
+				<li class="<if condition=" $nav['name'] eq MODULE_NAME">active</if>"><a
+					href="{$nav.action}">{$nav.lang}</a></li>
+				</volist>
+			</ul>
+			<ul class="nav nav-sidebar">
+				<li><a href=""></a></li>
+
+			</ul>
+		</div>
+		</block>
+		{// E - left } 
+		
+		{// S - right }
+		<block name="subHrader">{//:dump($subHeader['nav'])}<include file="Common:subHeader" /></block>
+		<block name="right_body">
+		<div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+			
+			{:C('WEB_SITE_NAME')}
+		</div></block>
+		{// E - right }
+	</div>
+</div>
+
+
+<!-- /主体 -->
+<!-- 底部 -->
+<block name="footer">
+<footer class="">
+	<div class="">
+		<p  class="text-center">{:C('WEB_SITE_COPYRIGHT')}</p>
+	</div>
+</footer>
+</block>
+<block name="script"> </block>
+<!-- /底部 -->
+</body>
+</html>

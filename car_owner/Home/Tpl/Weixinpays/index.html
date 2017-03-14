@@ -1,0 +1,49 @@
+<html>
+ <head>
+    <meta http-equiv="content-type" content="text/html;charset=utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <title>易自助微信支付</title>
+    <script type="text/javascript">
+        //调用微信JS api 支付
+        function jsApiCall()
+        {
+            WeixinJSBridge.invoke('getBrandWCPayRequest',{$jsApiParameters},
+            function(res){
+                WeixinJSBridge.log(res.err_msg);
+                // alert(res.err_code+res.err_desc+res.err_msg);
+
+                if(res.err_msg == "get_brand_wcpay_request:ok"){
+                        //支付成功业务逻辑
+                        alert("微信支付成功!");
+                        location.href = "{:U('Qrcode/qrcode')}";
+                       
+                }else if(res.err_msg == "get_brand_wcpay_request:cancel"){
+                        //支付失败业务逻辑
+                        alert("已取消微信支付!");
+                        history.go(-3);
+                }
+
+                  //这里是信息提示。可以加判断做跳转，支付成功后也都会回到这里提示信息。具体你可以参考手册里面的信息。
+            }
+        );
+        }
+
+        function callpay()
+        {
+            if (typeof WeixinJSBridge == "undefined"){
+                // alert('null');
+                if( document.addEventListener ){
+                    document.addEventListener('WeixinJSBridgeReady', jsApiCall, false);
+                }else if (document.attachEvent){
+                    document.attachEvent('WeixinJSBridgeReady', jsApiCall);
+                    document.attachEvent('onWeixinJSBridgeReady', jsApiCall);
+                }
+            }else{
+                jsApiCall();
+            }
+        }
+    </script>
+ </head>
+ <body onload="callpay()">
+ </body>
+ </html>
